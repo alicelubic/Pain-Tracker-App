@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">OwlsTracker</string>
+    <string name="remedy_walk">Walk</string>
+    <string name="remedy_ice">Ice</string>
+    <string name="remedy_stretch">Stretch</string>
 </resources>

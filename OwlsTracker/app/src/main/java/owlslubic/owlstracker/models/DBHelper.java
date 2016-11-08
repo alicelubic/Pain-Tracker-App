@@ -104,7 +104,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    //write to db
+    //write to db, //TODO replace if exists
     public void writeToDatabase(@Nullable Remedy rem, @Nullable RatingScale rat, @Nullable SpecialtyTreatment spec) {
         String tableName;
         String date;
@@ -161,15 +161,14 @@ public class DBHelper extends SQLiteOpenHelper {
         StringBuilder resultsBuilder = new StringBuilder(100);
         SQLiteDatabase db = getReadableDatabase();
 
-        String queryRemedies = "SELECT * FROM " + REMEDIES_TABLE + " WHERE " + COL_DATE + " =?";// + date;
+        String queryRemedies = "SELECT * FROM " + REMEDIES_TABLE + " WHERE " + COL_DATE + " =?";
         //note to self: earlier sql thought that the date was my column name, and it is because the
         //date needs to be surrounded by single quotes to be included in the query string
-        String queryRatings = "SELECT * FROM " + RATINGS_TABLE + " WHERE " + COL_DATE + " =?";// + date;
-        String querySpecialty = "SELECT * FROM " + SPECIALTY_TABLE + " WHERE " + COL_DATE + " =?";// + date;
+        String queryRatings = "SELECT * FROM " + RATINGS_TABLE + " WHERE " + COL_DATE + " =?";
+        String querySpecialty = "SELECT * FROM " + SPECIALTY_TABLE + " WHERE " + COL_DATE + " =?";
 
-//        Cursor cursor = db.rawQuery(queryRemedies, null);
-        Cursor cursor = db.rawQuery(queryRemedies,new String[]{date});
-        Log.d(TAG, "getAllByDate: cursor count = "+cursor.getCount());
+        Cursor cursor = db.rawQuery(queryRemedies, new String[]{date});
+        Log.d(TAG, "getAllByDate: cursor count = " + cursor.getCount());
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(cursor.getColumnIndex(COL_NAME));
@@ -205,7 +204,6 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor2.close();
 
 
-
         return resultsBuilder.toString();
     }
 
@@ -226,10 +224,14 @@ public class DBHelper extends SQLiteOpenHelper {
             table = REMEDIES_TABLE;
             qtyCol = COL_QTY_OR_DEGREE;
         }
+//        String update = "UPDATE " + table +
+//                " SET " + qtyCol + " = " + amt +
+//                " WHERE " + COL_NAME + " = " + data.getName() +
+//                " AND " + COL_DATE + " = " + data.getDate();
         String update = "UPDATE " + table +
                 " SET " + qtyCol + " = " + amt +
-                " WHERE " + COL_NAME + " = " + data.getName() +
-                " AND " + COL_DATE + " = " + data.getDate();
+                " WHERE " + COL_NAME + " = \'" + data.getName() +
+                "\' AND " + COL_DATE + " = \'" + data.getDate()+"\'";
 
         db.execSQL(update);
         db.close();

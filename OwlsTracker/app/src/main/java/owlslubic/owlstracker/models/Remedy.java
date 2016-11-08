@@ -19,11 +19,13 @@ public class Remedy extends WellnessTracker {
 
     private boolean usedToday;
     private int qtyOrDegree;
+    private int imageId;
 
-    public Remedy(String name, String notes, String date, boolean usedToday, int qtyOrDegree) {
+    public Remedy(String name, String notes, String date, boolean usedToday, int qtyOrDegree, int imageId) {
         super(name, notes, date);
         this.usedToday = usedToday;
         this.qtyOrDegree = qtyOrDegree;
+        this.imageId = imageId;
     }
 
     public boolean wasUsedToday() {
@@ -40,5 +42,14 @@ public class Remedy extends WellnessTracker {
 
     public void setQtyOrDegree(int qtyOrDegree) {
         this.qtyOrDegree = qtyOrDegree;
+    }
+
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }
