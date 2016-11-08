@@ -5,11 +5,12 @@ package owlslubic.owlstracker.models;
  */
 
 public class WellnessTracker {
-    private String name, notes;
+    private String name, notes, date;
 
-    public WellnessTracker(String name, String notes) {
+    public WellnessTracker(String name, String notes, String date) {
         this.name = name;
         this.notes = notes;
+        this.date = date;
     }
 
     public String getName() {
@@ -26,5 +27,13 @@ public class WellnessTracker {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

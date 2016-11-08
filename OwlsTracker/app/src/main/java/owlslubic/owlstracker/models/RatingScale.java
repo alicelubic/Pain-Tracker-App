@@ -5,11 +5,19 @@ package owlslubic.owlstracker.models;
  */
 
 public class RatingScale extends WellnessTracker {
+    /*
+    * this class will cover:
+    * pain
+    * sleep
+    * food
+    * stress
+    * overall
+    * */
 
     private double rating;
 
-    public RatingScale(String name, String notes, double rating) {
-        super(name, notes);
+    public RatingScale(String name, String notes, String date, double rating) {
+        super(name, notes, date);
         this.rating = rating;
     }
 
