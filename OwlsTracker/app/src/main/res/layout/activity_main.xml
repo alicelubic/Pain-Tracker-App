@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="owlslubic.owlstracker.controllers.MainActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:gravity="top|start"
+        android:background="@color/colorPrimaryDark"
+        app:titleTextColor="@android:color/white">
+
+        <android.support.v7.view.menu.ActionMenuItemView
+            android:id="@+id/actionmenuitemview_main"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize" />
+    </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/main.tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#125688"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:minHeight="?attr/actionBarSize" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main.viewpager"

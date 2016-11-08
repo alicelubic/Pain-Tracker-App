@@ -1,9 +1,11 @@
 package owlslubic.owlstracker.controllers;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.fragments.RatingsFragment;
 import owlslubic.owlstracker.fragments.RemediesFragment;
 import owlslubic.owlstracker.fragments.SummaryFragment;
@@ -13,21 +15,21 @@ import owlslubic.owlstracker.fragments.SummaryFragment;
  */
 
 public class SomePagerAdapter extends FragmentPagerAdapter{
-    public SomePagerAdapter(FragmentManager fm) {
+    private Context mContext;
+    public SomePagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+        mContext = context;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch(position) {
             case 0:
-                return new RatingsFragment();
+                return RatingsFragment.newInstance();
             case 1:
-                return new RemediesFragment();
+                return RemediesFragment.newInstance();
             case 2:
-                return new RemediesFragment();
-            case 3:
-                return new SummaryFragment();
+                return SummaryFragment.newInstance();
             default:
                 return null;
         }
@@ -35,6 +37,20 @@ public class SomePagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch(position){
+            case 0:
+                return mContext.getString(R.string.tab_scales);
+            case 1:
+                return mContext.getString(R.string.tab_remedies);
+            case 2:
+                return mContext.getString(R.string.tab_summary);
+            default:
+                return null;
+        }
     }
 }

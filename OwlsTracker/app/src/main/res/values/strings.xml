@@ -3,4 +3,17 @@
     <string name="remedy_walk">Walk</string>
     <string name="remedy_ice">Ice</string>
     <string name="remedy_stretch">Stretch</string>
+    <string name="add_specialty_treatment">+ specialty treatment</string>
+    <string name="herb_image_url">http://static.tumblr.com/86b4cfa14532c345641c277a9768e273/rx7mvj9/XNZn0764h/tumblr_static_tumblr_miwt30vuqi1r4chwro1_1280.png</string>
+    <string name="advil">Advil</string>
+    <string name="aleve">Aleve</string>
+    <string name="ativan">Ativan</string>
+    <string name="herbal_supp">Herbal Supplement</string>
+    <string name="turmeric">Turmeric</string>
+    <string name="tab_scales">Scales</string>
+    <string name="tab_remedies">Remedies</string>
+    <string name="tab_summary">Summary</string>
+    <string name="date_format">EEE, MMM d yyyy</string>
+    <string name="done">Done</string>
+
 </resources>

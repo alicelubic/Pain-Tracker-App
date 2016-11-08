@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#80ded9</color>
+    <color name="colorPrimaryDark">#119da4</color>
+    <color name="colorAccent">#564d65</color>
 
     <color name="degree_low">#ffcc80</color>
     <color name="degree_med">#ffab40</color>
     <color name="degree_hi">#fb8c00</color>
+    <color name="white">#fafafa</color>
+
+    <color name="blackish_accent">#1a181b</color>
+    <color name="turquoise">#119da4</color>
+    <color name="purple">#564d65</color>
+    <color name="light_turquoise">#80ded9</color>
+    <color name="seafoam_green">#2cda9d</color>
 
 
 </resources>

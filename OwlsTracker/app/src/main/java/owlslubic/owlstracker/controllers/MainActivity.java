@@ -1,11 +1,16 @@
 package owlslubic.owlstracker.controllers;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ActionMenuView;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ViewPager mPager;
+    private ActionMenuView mMenuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +41,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initViews() {
+        //setting up toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(null);
+        }
+//        mMenuView = (ActionMenuView) toolbar.findViewById(R.id.actionmenuitemview_main);
+//        mMenuView.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                return onOptionsItemSelected(item);
+//            }
+//        });
         //setting up pager
         mPager = (ViewPager) findViewById(R.id.main_viewpager);
-        SomePagerAdapter adapter = new SomePagerAdapter(getSupportFragmentManager());
+        SomePagerAdapter adapter = new SomePagerAdapter(getSupportFragmentManager(), this);
         mPager.setAdapter(adapter);
-        //setting up tabs
+        //setting up tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Scales"));
-        tabLayout.addTab(tabLayout.newTab().setText("Meds"));
-        tabLayout.addTab(tabLayout.newTab().setText("Activites"));
-        tabLayout.addTab(tabLayout.newTab().setText("Summary"));
-        //set tab bar gravity
+        tabLayout.setupWithViewPager(mPager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         //change page when tab selected
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -67,19 +83,42 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //for the menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-    private void createExampleData() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.item_add_specialty) {
+            //launch a dialog box about it
+            Toast.makeText(this, "make a dialog to do this!", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if(item.getItemId()==R.id.item_done){
+            //determine which page is showing
+            //gather the data from that page
+            //save it to database
+            //let user know it has been done
+            //set the page back to normal, i.e. un-expand the cards
+            Toast.makeText(this, "done!", Toast.LENGTH_SHORT).show();
 
-        SpecialtyTreatment rfD = new SpecialtyTreatment(
-                "Radiofrequency Denervation", null, getTheDate(), 6);
-        RatingScale pain = new RatingScale(
-                "Pain Scale", null, getTheDate(), 9.0);//9.0 will correspond with a pain face
-        Remedy pot = new Remedy("Herbal", null, getTheDate(), true, 5,0);
-        //then add to database
-        DBHelper helper = DBHelper.getInstance(MainActivity.this);
-        helper.writeToDatabase(pot, null, null);
-        helper.writeToDatabase(null, pain, null);
-        helper.writeToDatabase(null, null, rfD);
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    // A method to find height of the status bar in order to adjust padding
+    // so toolbar does not go under status bar
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     public static String getTheDate() {
@@ -87,6 +126,4 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "getDate: " + df.format(Calendar.getInstance().getTime()));
         return df.format(Calendar.getInstance().getTime());
     }
-
-
 }
