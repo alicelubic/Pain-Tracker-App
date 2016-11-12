@@ -6,10 +6,13 @@
         android:title="@string/add_specialty_treatment"
         app:showAsAction="never" />
     <item
-        android:id="@+id/item_done"
-        android:icon="@drawable/ic_done"
-        android:title="@string/done"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/edit_db"
+        android:title="edit"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/dump_db"
+        android:title="dump db"
+        app:showAsAction="never"/>
 
 
 </menu>

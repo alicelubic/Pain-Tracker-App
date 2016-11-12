@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cardview="http://schemas.android.com/tools"
     android:id="@+id/cardview_remedies"
     style="@style/AppTheme"
@@ -30,6 +29,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="6dp"/>
+<!--
 
         <LinearLayout
             android:id="@+id/linearlayout_remedies_card_quantity"
@@ -95,6 +95,24 @@
                 android:padding="3dp" />
 
         </LinearLayout>
-
+-->
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textview_rem_card_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="80sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
 </android.support.v7.widget.CardView>

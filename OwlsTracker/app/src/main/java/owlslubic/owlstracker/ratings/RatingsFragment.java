@@ -1,5 +1,6 @@
-package owlslubic.owlstracker.fragments;
+package owlslubic.owlstracker.ratings;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,8 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.squareup.otto.Subscribe;
 
 import owlslubic.owlstracker.R;
+import owlslubic.owlstracker.main.MainActivity;
+import owlslubic.owlstracker.models.SaveRatingsEvent;
 
 /**
  * Created by owlslubic on 11/7/16.
@@ -26,6 +32,18 @@ public class RatingsFragment extends Fragment {
         RatingsFragment fragment = new RatingsFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        MainActivity.getBusInstance().register(this);
+    }
+
+    @Subscribe public void writeToDB(SaveRatingsEvent event){
+        Toast.makeText(getContext(), "ratings!", Toast.LENGTH_SHORT).show();
+
     }
 
     @Nullable

@@ -1,35 +1,33 @@
-package owlslubic.owlstracker.controllers;
+package owlslubic.owlstracker.main;
 
-import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.otto.Bus;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.models.DBHelper;
-import owlslubic.owlstracker.models.RatingScale;
 import owlslubic.owlstracker.models.Remedy;
-import owlslubic.owlstracker.models.SpecialtyTreatment;
+import owlslubic.owlstracker.models.SaveRatingsEvent;
+import owlslubic.owlstracker.models.SaveRemediesEvent;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ViewPager mPager;
-    private ActionMenuView mMenuView;
+    public static Bus mBus = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
-
     }
 
     public void initViews() {
@@ -48,13 +45,8 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(null);
         }
-//        mMenuView = (ActionMenuView) toolbar.findViewById(R.id.actionmenuitemview_main);
-//        mMenuView.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                return onOptionsItemSelected(item);
-//            }
-//        });
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_done, null));
+
         //setting up pager
         mPager = (ViewPager) findViewById(R.id.main_viewpager);
         SomePagerAdapter adapter = new SomePagerAdapter(getSupportFragmentManager(), this);
@@ -90,28 +82,49 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    public void submitData() {
+
+        /**i realize that OTTO or any event bus is not intended for this,
+         * but i wanted to get a sense of how it works in a simple way*/
+
+        Bus bus = getBusInstance();
+
+        switch (mPager.getCurrentItem()) {
+            case 0://ratings
+                bus.post(new SaveRatingsEvent());
+                break;
+            case 1://remedies
+                bus.post(new SaveRemediesEvent());
+                break;
+            case 2://summary
+                //do nothing
+                Toast.makeText(this, "shouldn't even be here today", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.item_add_specialty) {
             //launch a dialog box about it
             Toast.makeText(this, "make a dialog to do this!", Toast.LENGTH_SHORT).show();
             return true;
-        } else if(item.getItemId()==R.id.item_done){
-            //determine which page is showing
-            //gather the data from that page
-            //save it to database
-            //let user know it has been done
-            //set the page back to normal, i.e. un-expand the cards
-            Toast.makeText(this, "done!", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == android.R.id.home) {
+            submitData();
+        } else if (item.getItemId() == R.id.dump_db) {
+            DBHelper.getInstance(this).dumpTableData();
+            Toast.makeText(this, "dumping...", Toast.LENGTH_SHORT).show();
 
-
+        } else if (item.getItemId() == R.id.edit_db) {
+            Toast.makeText(this, "edit!", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
 
 
     // A method to find height of the status bar in order to adjust padding
-    // so toolbar does not go under status bar
+    // so toolbar does not go under our translucent status bar
     public int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -126,4 +139,12 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "getDate: " + df.format(Calendar.getInstance().getTime()));
         return df.format(Calendar.getInstance().getTime());
     }
+
+    public static Bus getBusInstance() {
+        if (mBus == null) {
+            mBus = new Bus();
+        }
+        return mBus;
+    }
+
 }

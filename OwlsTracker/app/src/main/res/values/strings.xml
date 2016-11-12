@@ -15,5 +15,6 @@
     <string name="tab_summary">Summary</string>
     <string name="date_format">EEE, MMM d yyyy</string>
     <string name="done">Done</string>
+    <string name="refresh">refresh</string>
 
 </resources>

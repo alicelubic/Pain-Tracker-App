@@ -1,4 +1,4 @@
-package owlslubic.owlstracker.controllers;
+package owlslubic.owlstracker.main;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import owlslubic.owlstracker.R;
-import owlslubic.owlstracker.fragments.RatingsFragment;
-import owlslubic.owlstracker.fragments.RemediesFragment;
-import owlslubic.owlstracker.fragments.SummaryFragment;
+import owlslubic.owlstracker.ratings.RatingsFragment;
+import owlslubic.owlstracker.remedies.RemediesFragment;
+import owlslubic.owlstracker.summary.SummaryFragment;
 
 /**
  * Created by owlslubic on 11/7/16.
