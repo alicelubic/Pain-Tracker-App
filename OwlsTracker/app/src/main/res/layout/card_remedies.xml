@@ -27,75 +27,9 @@
             android:id="@+id/imageview_remedies_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:padding="6dp"/>
-<!--
-
-        <LinearLayout
-            android:id="@+id/linearlayout_remedies_card_quantity"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:gravity="center_horizontal"
-            android:background="@color/colorPrimary">
-
-            <ImageButton
-                android:id="@+id/imagebutton_qty_decrease"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="6dp"
-                android:src="@drawable/ic_subtract_button"/>
-
-            <EditText
-                android:id="@+id/edittext_remedies_card_quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:paddingEnd="6dp"
-                android:paddingStart="6dp" />
-
-            <ImageButton
-                android:id="@+id/imagebutton_qty_increase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="6dp"
-                android:src="@drawable/ic_add_button"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearlayout_remedies_card_degrees"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:gravity="center_horizontal"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:id="@+id/textview_degree_low"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@color/degree_low"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/textview_degree_med"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@color/degree_med"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/textview_degree_hi"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@color/degree_hi"
-                android:padding="3dp" />
-
-        </LinearLayout>
--->
+            android:gravity="center"
+            android:padding="6dp"
+            android:layout_marginBottom="6dp"/>
     </LinearLayout>
 
     <FrameLayout

@@ -79,4 +79,11 @@ public class EditFragment extends Fragment implements View.OnClickListener{
         mMed = (TextView) view.findViewById(R.id.textview_degree_med);
         mHi = (TextView) view.findViewById(R.id.textview_degree_hi);
     }
+
+    //preserve data for configuration change
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+    }
 }

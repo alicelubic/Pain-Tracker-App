@@ -17,15 +17,22 @@ public class Remedy extends WellnessTracker {
     * ice
     * */
 
+    /*for activities rather than meds, there are 3 degrees:
+    * 1 = a little
+    * 2 = some
+    * 3 = a lot
+    * */
     private boolean usedToday;
     private int qtyOrDegree;
     private int imageId;
+    private String medOrActivity;
 
-    public Remedy(String name, String notes, String date, boolean usedToday, int qtyOrDegree, int imageId) {
+    public Remedy(String name, String notes, String date, boolean usedToday, int qtyOrDegree, int imageId, String medOrActivity) {
         super(name, notes, date);
         this.usedToday = usedToday;
         this.qtyOrDegree = qtyOrDegree;
         this.imageId = imageId;
+        this.medOrActivity = medOrActivity;
     }
 
     public boolean wasUsedToday() {
@@ -51,5 +58,13 @@ public class Remedy extends WellnessTracker {
 
     public void setImageId(int imageId) {
         this.imageId = imageId;
+    }
+
+    public String getMedOrActivity() {
+        return medOrActivity;
+    }
+
+    public void setMedOrActivity(String medOrActivity) {
+        this.medOrActivity = medOrActivity;
     }
 }

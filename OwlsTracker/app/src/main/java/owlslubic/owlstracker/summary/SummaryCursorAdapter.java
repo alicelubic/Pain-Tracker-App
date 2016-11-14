@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import owlslubic.owlstracker.models.DBHelper;
+import owlslubic.owlstracker.main.DBHelper;
 
 /**
  * Created by owlslubic on 11/8/16.

@@ -6,15 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.main.MainActivity;
+import owlslubic.owlstracker.main.DBHelper;
 import owlslubic.owlstracker.models.Remedy;
 
 /**
@@ -46,6 +43,9 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
 
         holder.mTitle.setText(currentItem.getName());
         holder.mImage.setImageDrawable(mContext.getDrawable(currentItem.getImageId()));
+        if(currentItem.getQtyOrDegree()==0){
+            holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.purple));
+        }
         holder.mCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +77,10 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
     private void updateCounter(RemediesViewHolder holder, Remedy currentItem) {
         currentItem.setUsedToday(true);
         int preClickQuantity = currentItem.getQtyOrDegree();
+        if (preClickQuantity == 0) {
+            //reset color card
+            holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.purple));
+        }
         //increment item's quantity once per click
         currentItem.setQtyOrDegree(preClickQuantity + 1);
         int currentQuantity = currentItem.getQtyOrDegree();
@@ -86,9 +90,23 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
         } else if (currentQuantity > 1) {
             //set textview to show quantity
             holder.mQuantity.setVisibility(View.VISIBLE);
-            holder.mQuantity.setText(String.valueOf(currentQuantity));
-        } else {
-
+            //if it's a med, show the qty, if it's an activity, show a verbal degree indicator
+            if (currentItem.getMedOrActivity().equals(DBHelper.MED)) {
+                holder.mQuantity.setText(String.valueOf(currentQuantity));
+            } else {
+                String degree = null;
+                if (currentQuantity == 2) {
+                    degree = "a lot";
+                } else if (currentQuantity == 3) {
+                    degree = "tons";
+                } else if (currentQuantity > 3) {
+                    //only 3 degrees, we dont wanna go crazy here
+                    currentItem.setQtyOrDegree(0);
+                    holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.purple));
+                }
+//                holder.mQuantity.setTextSize(mContext.getResources().getDimension(R.dimen.big_text));
+                holder.mQuantity.setText(degree);
+            }
         }
 
     }

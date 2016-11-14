@@ -8,24 +8,25 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.otto.Bus;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import owlslubic.owlstracker.R;
-import owlslubic.owlstracker.models.DBHelper;
-import owlslubic.owlstracker.models.Remedy;
+import owlslubic.owlstracker.main.asyncTasks.LoadRemediesTask;
 import owlslubic.owlstracker.models.SaveRatingsEvent;
 import owlslubic.owlstracker.models.SaveRemediesEvent;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final String PREFS = "prefs";
     private ViewPager mPager;
+    public ProgressBar mProgressBar;
     public static Bus mBus = null;
 
 
@@ -35,7 +36,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
+        new LoadRemediesTask(this, mProgressBar, getCurrentFocus()).execute();
+        Log.d(TAG+" LoadRem", "onCreate: called LoadRemediesTask");
+
     }
+
 
     public void initViews() {
         //setting up toolbar
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //for loading db
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar_main);
     }
 
     //for the menu
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**i realize that OTTO or any event bus is not intended for this,
          * but i wanted to get a sense of how it works in a simple way*/
+
 
         Bus bus = getBusInstance();
 
@@ -146,5 +154,27 @@ public class MainActivity extends AppCompatActivity {
         }
         return mBus;
     }
+
+    /*
+    public void loadDataOnFirstRun(){
+
+        //currently having this async task makes it crash
+        //TODO come back to this
+
+        boolean b;
+        SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        b = prefs.getBoolean("FIRST_RUN", false);
+        //if this is the first run, load
+        if (!b) {
+            new LoadDatabaseTask().execute();
+            Log.d(TAG, "loadDataOnFirstRun: task was called");
+        }
+        SharedPreferences.Editor editor = prefs.edit();
+        //then edit prefs to show that the first run has already gone
+        editor.putBoolean("FIRST_RUN", true);
+        editor.apply();
+    }
+
+*/
 
 }

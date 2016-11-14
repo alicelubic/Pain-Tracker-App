@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.main.MainActivity;
-import owlslubic.owlstracker.models.DBHelper;
+import owlslubic.owlstracker.main.DBHelper;
 import owlslubic.owlstracker.models.WellnessTracker;
 
 /**
@@ -82,6 +81,12 @@ public class SummaryFragment extends Fragment {
         //swipe to refresh list results
         setRefresher();
 
+    }
+    //preserve data for configuration change
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
     }
 
 
