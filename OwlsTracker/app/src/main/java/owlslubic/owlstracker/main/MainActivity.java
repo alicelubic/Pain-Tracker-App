@@ -1,5 +1,7 @@
 package owlslubic.owlstracker.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
-        new LoadRemediesTask(this, mProgressBar, getCurrentFocus()).execute();
-        Log.d(TAG+" LoadRem", "onCreate: called LoadRemediesTask");
+        loadDataOnFirstRun();
 
     }
 
@@ -121,8 +122,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (item.getItemId() == android.R.id.home) {
             submitData();
         } else if (item.getItemId() == R.id.dump_db) {
-            DBHelper.getInstance(this).dumpTableData();
-            Toast.makeText(this, "dumping...", Toast.LENGTH_SHORT).show();
+            DBHelper.getInstance(this).dumpTableData(this);
 
         } else if (item.getItemId() == R.id.edit_db) {
             Toast.makeText(this, "edit!", Toast.LENGTH_SHORT).show();
@@ -144,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static String getTheDate() {
         SimpleDateFormat df = new SimpleDateFormat("EEE, MMM d yyyy");
-        Log.i(TAG, "getDate: " + df.format(Calendar.getInstance().getTime()));
         return df.format(Calendar.getInstance().getTime());
     }
 
@@ -155,19 +154,16 @@ public class MainActivity extends AppCompatActivity {
         return mBus;
     }
 
-    /*
+    //TODO find better way to laod data in beginning
     public void loadDataOnFirstRun(){
-
-        //currently having this async task makes it crash
-        //TODO come back to this
-
+        Log.d(TAG, "loadDataOnFirstRun WAS CALLED");
         boolean b;
         SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         b = prefs.getBoolean("FIRST_RUN", false);
         //if this is the first run, load
         if (!b) {
-            new LoadDatabaseTask().execute();
-            Log.d(TAG, "loadDataOnFirstRun: task was called");
+            new LoadRemediesTask(this).execute();
+            Log.d(TAG, "loadDataOnFirstRun: the task was called");
         }
         SharedPreferences.Editor editor = prefs.edit();
         //then edit prefs to show that the first run has already gone
@@ -175,6 +171,6 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-*/
+
 
 }

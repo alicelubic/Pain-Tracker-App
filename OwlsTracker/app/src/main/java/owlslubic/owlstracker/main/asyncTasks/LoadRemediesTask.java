@@ -26,16 +26,12 @@ import static owlslubic.owlstracker.main.DBHelper.COL_QTY_OR_DEGREE;
 import static owlslubic.owlstracker.main.DBHelper.MED;
 import static owlslubic.owlstracker.main.DBHelper.REMEDY_OPTIONS_TABLE;
 
-public class LoadRemediesTask extends AsyncTask<Void,Integer,Void> {
+public class LoadRemediesTask extends AsyncTask<Void, Integer, Void> {
     private static final String TAG = "LoadRemediesTask";
     private Context mContext;
-    private ProgressBar mProgress;
-    private View mView;
 
-    public LoadRemediesTask(Context context, ProgressBar progress, View view) {
+    public LoadRemediesTask(Context context) {
         mContext = context;
-        mProgress = progress;
-        mView = view;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class LoadRemediesTask extends AsyncTask<Void,Integer,Void> {
         list.add(new Remedy(mContext.getString(R.string.remedy_walk), null, MainActivity.getTheDate(), false, 0, R.drawable.walk, ACTIVITY));
         list.add(new Remedy(mContext.getString(R.string.remedy_ice), null, MainActivity.getTheDate(), false, 0, R.drawable.ice, ACTIVITY));
         list.add(new Remedy(mContext.getString(R.string.remedy_stretch), null, MainActivity.getTheDate(), false, 0, R.drawable.stretch, ACTIVITY));
-        Log.d(TAG, "doInBackground: list size is "+list.size());
+        Log.d(TAG, "doInBackground: list size is " + list.size());
         //then write them to the database
         ContentValues vals = new ContentValues();
         for (Remedy rem : list) {
@@ -64,7 +60,7 @@ public class LoadRemediesTask extends AsyncTask<Void,Integer,Void> {
             vals.put(COL_MED_OR_ACT, rem.getMedOrActivity());
             vals.put(COL_IMAGE_ID, rem.getImageId());
             db.insertWithOnConflict(REMEDY_OPTIONS_TABLE, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
-            Log.d(TAG, "doInBackground: inserting... "+rem.getName());
+            Log.d(TAG, "doInBackground: inserting... " + rem.getName());
         }
 
         db.close();
@@ -72,27 +68,8 @@ public class LoadRemediesTask extends AsyncTask<Void,Integer,Void> {
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-        if(mProgress!=null){
-            mProgress.setVisibility(View.VISIBLE);
-            mProgress.setMax(100);
-            for (int i = 0; i < values.length-1; i++) {
-                mProgress.setProgress(i);
-            }
-
-        }
-    }
-
-    @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        if(mProgress!=null){
-            mProgress.setVisibility(View.INVISIBLE);
-        }
-        if (mView != null) {
-            Snackbar snack = Snackbar.make(mView, "remedies loaded!", Snackbar.LENGTH_SHORT);
-            snack.show();
-        }
+        Log.d(TAG, "onPostExecute: REMEDIES HAVE BEEN LOADED TO DB");
     }
 }

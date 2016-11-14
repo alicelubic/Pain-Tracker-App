@@ -16,5 +16,8 @@
     <string name="date_format">EEE, MMM d yyyy</string>
     <string name="done">Done</string>
     <string name="refresh">refresh</string>
+    <string name="degree_2">a lot</string>
+    <string name="degree_3">tons</string>
+    <string name="degree_1">kinda</string>
 
 </resources>

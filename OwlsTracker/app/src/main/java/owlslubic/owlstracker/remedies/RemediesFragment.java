@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import owlslubic.owlstracker.main.MainActivity;
 import owlslubic.owlstracker.main.DBHelper;
 import owlslubic.owlstracker.main.asyncTasks.WriteToDatabaseTask;
 import owlslubic.owlstracker.models.Remedy;
+import owlslubic.owlstracker.models.RemedyListSingleton;
 import owlslubic.owlstracker.models.SaveRemediesEvent;
 
 import static owlslubic.owlstracker.main.DBHelper.ACTIVITY;
@@ -70,9 +72,9 @@ public class RemediesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //get the list of objects
-
         mRemedies = getTempRemList();
-//        mRemedies = DBHelper.getInstance(getContext()).getRemedyOptionsList(false, false);
+//        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
+//        Log.d(TAG, "onViewCreated: before passed to adapter, mRemedies size is: "+ mRemedies.size());
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         //pass to and set the adapter
         mAdapter = new RemediesRecyclerAdapter(
@@ -107,14 +109,12 @@ public class RemediesFragment extends Fragment {
         for (Remedy rem : mRemedies) {
             if (rem.wasUsedToday()) {
                 new WriteToDatabaseTask(getContext(), getView()).execute(rem);
-
             }
         }
         //then reset the cards by passing a fresh list to the adapter
-        mRemedies = getTempRemList();
+        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
 //        mRemedies = DBHelper.getInstance(getContext()).getRemedyOptionsList(false, false);
         mAdapter.notifyDataSetChanged();
-
 
 
     }

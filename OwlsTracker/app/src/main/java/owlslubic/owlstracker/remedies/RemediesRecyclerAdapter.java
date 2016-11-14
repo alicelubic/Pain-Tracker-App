@@ -96,9 +96,9 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
             } else {
                 String degree = null;
                 if (currentQuantity == 2) {
-                    degree = "a lot";
+                    degree = mContext.getString(R.string.degree_2);
                 } else if (currentQuantity == 3) {
-                    degree = "tons";
+                    degree = mContext.getString(R.string.degree_3);
                 } else if (currentQuantity > 3) {
                     //only 3 degrees, we dont wanna go crazy here
                     currentItem.setQtyOrDegree(0);

@@ -56,9 +56,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_USER_TABLE);
         db.execSQL(SQL_CREATE_REMEDY_OPTIONS_TABLE);
-
-        //insert remedy options
-//        insertRemedyOptions(db);
     }
 
     @Override
@@ -94,87 +91,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
             /*   helper methods!   */
 
+
+
     //empty table contents
-    public void dumpTableData() {
+    public void dumpTableData(Context context) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + USER_TABLE);
-
+        Toast.makeText(context, "user_table contents deleted", Toast.LENGTH_SHORT).show();
+        db.execSQL("DELETE FROM "+ REMEDY_OPTIONS_TABLE);
+        Toast.makeText(context, "remedies_table contents deleted", Toast.LENGTH_SHORT).show();
         db.close();
     }
 
-    //write to db, //TODO replace if exists, put this in an async task
-    public void writeToDatabase(@Nullable Remedy rem, @Nullable RatingScale rat) {
-        String date;
-        String name;
-        String notes;
-        int qtyOrDegree;
-        double rating;
-        String type;
-
-        if (rat == null && rem != null) {
-            name = rem.getName();
-            notes = rem.getNotes();
-            date = rem.getDate();
-            qtyOrDegree = rem.getQtyOrDegree();
-            rating = 0;
-            type = rem.getMedOrActivity();
-
-        } else if (rem == null && rat != null) {
-            name = rat.getName();
-            notes = rat.getNotes();
-            date = rat.getDate();
-            qtyOrDegree = 0;
-            rating = rat.getRating();
-            type = null;
-        } else {
-            Log.d(TAG, "writeToDatabase: no valid object type");
-            //saying return because if it's not at least one of those, then it's not gonna work
-            return;
-        }
-
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues vals = new ContentValues();
-        vals.put(COL_NAME, name);
-        vals.put(COL_NOTES, notes);
-        vals.put(COL_DATE, date);
-        vals.put(COL_QTY_OR_DEGREE, qtyOrDegree);
-        vals.put(COL_RATING, rating);
-        vals.put(COL_MED_OR_ACT, type);
-        db.insertWithOnConflict(USER_TABLE, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
-        //TODO should have some sort of completion listener
-        // to make sure it actually added before Toasting that the data was added
-    }
-
-
-    private void insertRemedyOptions(SQLiteDatabase db) {
-        //create the objects
-        //this may change when, in the future, the user can add their own also...
-        ArrayList<Remedy> list = new ArrayList<>();
-
-       /* list.add(new Remedy(mContext.getString(R.string.advil), null, MainActivity.getTheDate(), false, 0, R.drawable.advil, MED));
-        list.add(new Remedy(mContext.getString(R.string.ativan), null, MainActivity.getTheDate(), false, 0, R.drawable.ativan, MED));
-        list.add(new Remedy(mContext.getString(R.string.herbal_supp), null, MainActivity.getTheDate(), false, 0, R.drawable.herb, MED));
-        list.add(new Remedy(mContext.getString(R.string.turmeric), null, MainActivity.getTheDate(), false, 0, R.drawable.turmeric, MED));
-        list.add(new Remedy(mContext.getString(R.string.remedy_walk), null, MainActivity.getTheDate(), false, 0, R.drawable.walk, ACTIVITY));
-        list.add(new Remedy(mContext.getString(R.string.remedy_ice), null, MainActivity.getTheDate(), false, 0, R.drawable.ice, ACTIVITY));
-        list.add(new Remedy(mContext.getString(R.string.remedy_stretch), null, MainActivity.getTheDate(), false, 0, R.drawable.stretch, ACTIVITY));
-*/
-        //then write them to the database
-        ContentValues vals = new ContentValues();
-        for (Remedy rem : list) {
-            vals.put(COL_NAME, rem.getName());
-            vals.put(COL_NOTES, rem.getNotes());
-            vals.put(COL_DATE, rem.getDate());
-            vals.put(COL_QTY_OR_DEGREE, rem.getQtyOrDegree());
-            vals.put(COL_MED_OR_ACT, rem.getMedOrActivity());
-            vals.put(COL_IMAGE_ID, rem.getImageId());
-            db.insertWithOnConflict(REMEDY_OPTIONS_TABLE, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
-        }
-        //not closing db like normal since im putting this in oncreate...?
-
-
-    }
 
     public ArrayList<Remedy> getRemedyOptionsList(boolean isMed, boolean isActivity) {
         SQLiteDatabase db = getReadableDatabase();
