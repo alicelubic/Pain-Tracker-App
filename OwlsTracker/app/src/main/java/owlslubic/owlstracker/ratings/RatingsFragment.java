@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.main.MainActivity;
 import owlslubic.owlstracker.main.DBHelper;
+import owlslubic.owlstracker.models.Rating;
 import owlslubic.owlstracker.models.Remedy;
 import owlslubic.owlstracker.models.SaveRatingsEvent;
 
@@ -33,7 +36,7 @@ import static owlslubic.owlstracker.main.DBHelper.MED;
 
 public class RatingsFragment extends Fragment {
     private static final String TAG = "RatingsFrag";
-    Button mTempButton;
+    private RecyclerView mRecyclerView;
 
     public static RatingsFragment newInstance() {
 
@@ -54,7 +57,7 @@ public class RatingsFragment extends Fragment {
         MainActivity.getBusInstance().register(this);
     }
 
-    //proving concept for how to save from each separate page
+    //proving concept for how to save from each separate page in the pager
     @Subscribe
     public void writeToDB(SaveRatingsEvent event) {
         Toast.makeText(getContext(), "ratings!", Toast.LENGTH_SHORT).show();
@@ -66,28 +69,21 @@ public class RatingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_ratings, container, false);
         FrameLayout layout = (FrameLayout) view.findViewById(R.id.framelayout_frag_ratings);
-        layout.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
-//        mTempButton = (Button) view.findViewById(R.id.temp_button);
+        layout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_ratings_frag);
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-/*
-
-        mTempButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadData();
-                Cursor c = DBHelper.getInstance(getContext()).getAllByDate(MainActivity.getTheDate());
-                Toast.makeText(getContext(), "count is " + c.getCount(), Toast.LENGTH_SHORT).show();
-            }
-
-        });
-*/
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        PainRatingsAdapter adapter = new PainRatingsAdapter(getPainScaleList(),getContext());
+        mRecyclerView.setAdapter(adapter);
 
     }
+
     //preserve data for configuration change
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -95,34 +91,18 @@ public class RatingsFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void loadData() {
+    public ArrayList<Rating> getPainScaleList() {
+        ArrayList<Rating> ratings = new ArrayList<>();
+
+        ratings.add(new Rating("fsp0", null, null, 0.0, R.drawable.fsp0, false));
+        ratings.add(new Rating("fsp2", null, null, 2.0, R.drawable.fsp2, false));
+        ratings.add(new Rating("fsp4", null, null, 4.0, R.drawable.fsp4, false));
+        ratings.add(new Rating("fsp6", null, null, 6.0, R.drawable.fsp6, false));
+        ratings.add(new Rating("fsp8", null, null, 8.0, R.drawable.fsp8, false));
+        ratings.add(new Rating("fsp10", null, null, 10.0, R.drawable.fsp10, false));
 
 
-        SQLiteDatabase db = DBHelper.getInstance(getContext()).getReadableDatabase();
-        //create the objects
-        //this may change when, in the future, the user can add their own also...
-        ArrayList<Remedy> list = new ArrayList<>();
-
-        list.add(new Remedy(getString(R.string.advil), null, MainActivity.getTheDate(), false, 0, R.drawable.advil, MED));
-        list.add(new Remedy(getString(R.string.aleve), null, MainActivity.getTheDate(), false, 0, R.drawable.aleve, MED));
-        list.add(new Remedy(getString(R.string.ativan), null, MainActivity.getTheDate(), false, 0, R.drawable.ativan, MED));
-        list.add(new Remedy(getString(R.string.herbal_supp), null, MainActivity.getTheDate(), false, 0, R.drawable.herb, MED));
-        list.add(new Remedy(getString(R.string.turmeric), null, MainActivity.getTheDate(), false, 0, R.drawable.turmeric, MED));
-        list.add(new Remedy(getString(R.string.remedy_walk), null, MainActivity.getTheDate(), false, 0, R.drawable.walk, ACTIVITY));
-        list.add(new Remedy(getString(R.string.remedy_ice), null, MainActivity.getTheDate(), false, 0, R.drawable.ice, ACTIVITY));
-        list.add(new Remedy(getString(R.string.remedy_stretch), null, MainActivity.getTheDate(), false, 0, R.drawable.stretch, ACTIVITY));
-
-        //then write them to the database
-        ContentValues vals = new ContentValues();
-        for (Remedy rem : list) {
-            vals.put(DBHelper.COL_NAME, rem.getName());
-            vals.put(DBHelper.COL_NOTES, rem.getNotes());
-            vals.put(DBHelper.COL_DATE, rem.getDate());
-            vals.put(DBHelper.COL_QTY_OR_DEGREE, rem.getQtyOrDegree());
-            vals.put(DBHelper.COL_MED_OR_ACT, rem.getMedOrActivity());
-            vals.put(DBHelper.COL_IMAGE_ID, rem.getImageId());
-            db.insertWithOnConflict(DBHelper.REMEDY_OPTIONS_TABLE, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
-        }
-        Log.d(TAG, "loadDataOnFirstRun: without async");
+        return ratings;
     }
+
 }

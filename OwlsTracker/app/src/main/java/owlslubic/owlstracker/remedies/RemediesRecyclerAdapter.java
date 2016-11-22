@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.List;
 
 import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.main.MainActivity;
 import owlslubic.owlstracker.main.DBHelper;
 import owlslubic.owlstracker.models.Remedy;
+import owlslubic.owlstracker.models.SaveRemediesEvent;
 
 /**
  * Created by owlslubic on 11/7/16.
@@ -28,6 +31,14 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
         mRemedies = remedies;
         mContext = context;
         MainActivity.getBusInstance().register(this);
+    }
+
+    @Subscribe
+    public void onDataSetChanged(SaveRemediesEvent event) {
+        for(Remedy rem : mRemedies){
+
+        }
+
     }
 
 
@@ -75,11 +86,15 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
     }
 
     private void updateCounter(RemediesViewHolder holder, Remedy currentItem) {
+        //if it's clicked at all, that means it's been used today, so:
         currentItem.setUsedToday(true);
         int preClickQuantity = currentItem.getQtyOrDegree();
+
         if (preClickQuantity == 0) {
             //reset color card
             holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.purple));
+            //hide quantity textview in case we don't need it yet...
+            holder.mQuantity.setVisibility(View.GONE);
         }
         //increment item's quantity once per click
         currentItem.setQtyOrDegree(preClickQuantity + 1);
@@ -117,16 +132,5 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
     }
 
 
-    public boolean isMed(Context context, int position) {
-        String name = mRemedies.get(position).getName();
-        if ((name.equals(context.getString(R.string.remedy_walk))) || (
-                name.equals(context.getString(R.string.remedy_ice)) || (
-                        name.equals(context.getString(R.string.remedy_stretch))))) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
 
 }

@@ -28,7 +28,7 @@ class RemedyListSingleton {
 
     public static synchronized owlslubic.owlstracker.models.RemedyListSingleton getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new owlslubic.owlstracker.models.RemedyListSingleton();
+            sInstance = new owlslubic.owlstracker.models.RemedyListSingleton(context.getApplicationContext());
         }
         return sInstance;
     }

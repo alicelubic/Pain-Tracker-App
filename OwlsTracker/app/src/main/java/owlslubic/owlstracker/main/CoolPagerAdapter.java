@@ -14,9 +14,9 @@ import owlslubic.owlstracker.summary.SummaryFragment;
  * Created by owlslubic on 11/7/16.
  */
 
-public class SomePagerAdapter extends FragmentPagerAdapter{
+public class CoolPagerAdapter extends FragmentPagerAdapter{
     private Context mContext;
-    public SomePagerAdapter(FragmentManager fm, Context context) {
+    public CoolPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
     }

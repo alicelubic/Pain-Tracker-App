@@ -1,6 +1,7 @@
 package owlslubic.owlstracker.summary;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import owlslubic.owlstracker.R;
@@ -29,6 +31,8 @@ public class SummaryFragment extends Fragment {
     private SwipeRefreshLayout mRefresh;
     private DBHelper mHelper;
     private SummaryCursorAdapter mAdapter;
+    private TextView mNoData;
+    private Cursor mCursor;
 
 
     public static SummaryFragment newInstance() {
@@ -50,23 +54,26 @@ public class SummaryFragment extends Fragment {
         mContainer = (FrameLayout) view.findViewById(R.id.frame_detailfrag_container);
         mRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_summary);
         mHelper = DBHelper.getInstance(getContext());
-        mAdapter = new SummaryCursorAdapter(getContext(),
-                mHelper.getAllByDate(MainActivity.getTheDate()),
-                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+//        mCursor = mHelper.getAllByDate(MainActivity.getTheDate());
+        mAdapter = new SummaryCursorAdapter(getContext(), mHelper.getAllByDate(MainActivity.getTheDate()), CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        mNoData = (TextView) view.findViewById(R.id.textview_no_summary_available);
         return view;
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        ((MainActivity)getActivity()).getSupportActionBar().setTitle("today's summary");
+
+
         //create and set adapter
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //launch a frag that shows the rest of the info!
-                launchEditFrag(getContext(),parent,position);
+//                launchEditFrag(getContext(), parent, position);
 
             }
         });
@@ -81,7 +88,11 @@ public class SummaryFragment extends Fragment {
         //swipe to refresh list results
         setRefresher();
 
+        //account for lack of data...
+//        checkCursorCount(mCursor);
+
     }
+
     //preserve data for configuration change
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -90,21 +101,32 @@ public class SummaryFragment extends Fragment {
     }
 
 
-
-    public void setRefresher(){
+    public void setRefresher() {
         mRefresh.setColorSchemeColors(getContext().getResources().getColor(R.color.purple));
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mRefresh.setRefreshing(false);
                 //query the db again, swap in the cursor with updated data
-                mAdapter.swapCursor(mHelper.getAllByDate(MainActivity.getTheDate()));
+                Cursor newCursor = mHelper.getAllByDate(MainActivity.getTheDate());
+                mAdapter.swapCursor(newCursor);
+//                checkCursorCount(newCursor);
             }
         });
 
     }
 
-    public void launchEditFrag(Context context, AdapterView<?> parent, int position ){
+    public void checkCursorCount(Cursor cursor) {
+        if (cursor.getCount() == 0) {
+            mNoData.setVisibility(View.VISIBLE);
+            mNoData.setText(R.string.no_summary);
+        } else {
+            mNoData.setVisibility(View.GONE);
+            mNoData.setText(null);
+        }
+    }
+
+    public void launchEditFrag(Context context, AdapterView<?> parent, int position) {
         WellnessTracker currentItem = (WellnessTracker) parent.getAdapter().getItem(position);
         //get the info, set it as arguments when you're launchin le detailfrag
         Toast.makeText(context, "edit frag!", Toast.LENGTH_SHORT).show();

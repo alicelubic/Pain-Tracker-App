@@ -8,11 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
-
-import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.main.DBHelper;
-import owlslubic.owlstracker.models.RatingScale;
+import owlslubic.owlstracker.models.Rating;
 import owlslubic.owlstracker.models.Remedy;
 import owlslubic.owlstracker.models.WellnessTracker;
 import static owlslubic.owlstracker.main.DBHelper.*;
@@ -37,11 +34,11 @@ public class WriteToDatabaseTask extends AsyncTask<WellnessTracker, Void, Void> 
     @Override
     protected Void doInBackground(WellnessTracker... params) {
         Remedy rem = null;
-        RatingScale rat = null;
+        Rating rat = null;
         if (params[0].getClass().equals(Remedy.class)) {
             rem = (Remedy) params[0];
-        } else if (params[0].getClass().equals(RatingScale.class)) {
-            rat = (RatingScale) params[0];
+        } else if (params[0].getClass().equals(Rating.class)) {
+            rat = (Rating) params[0];
         } else {
             return null;
         }

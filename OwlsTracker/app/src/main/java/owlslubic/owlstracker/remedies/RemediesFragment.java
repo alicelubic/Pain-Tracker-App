@@ -3,6 +3,7 @@ package owlslubic.owlstracker.remedies;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -72,8 +73,8 @@ public class RemediesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //get the list of objects
-        mRemedies = getTempRemList();
-//        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
+        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
+        //        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
 //        Log.d(TAG, "onViewCreated: before passed to adapter, mRemedies size is: "+ mRemedies.size());
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         //pass to and set the adapter
@@ -114,25 +115,17 @@ public class RemediesFragment extends Fragment {
         //then reset the cards by passing a fresh list to the adapter
         mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
 //        mRemedies = DBHelper.getInstance(getContext()).getRemedyOptionsList(false, false);
-        mAdapter.notifyDataSetChanged();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // wait a sec
+                mAdapter.notifyDataSetChanged();
+            }
+        }, 1000);
 
 
     }
 
-    //at some point, this list will be attained straight from the DB
-    public ArrayList<Remedy> getTempRemList() {
-        ArrayList<Remedy> list = new ArrayList<>();
-
-        list.add(new Remedy(getString(R.string.advil), null, MainActivity.getTheDate(), false, 0, R.drawable.advil, MED));
-        list.add(new Remedy(getString(R.string.aleve), null, MainActivity.getTheDate(), false, 0, R.drawable.aleve, MED));
-        list.add(new Remedy(getString(R.string.ativan), null, MainActivity.getTheDate(), false, 0, R.drawable.ativan, MED));
-        list.add(new Remedy(getString(R.string.herbal_supp), null, MainActivity.getTheDate(), false, 0, R.drawable.herb, MED));
-        list.add(new Remedy(getString(R.string.turmeric), null, MainActivity.getTheDate(), false, 0, R.drawable.turmeric, MED));
-        list.add(new Remedy(getString(R.string.remedy_walk), null, MainActivity.getTheDate(), false, 0, R.drawable.walk, ACTIVITY));
-        list.add(new Remedy(getString(R.string.remedy_ice), null, MainActivity.getTheDate(), false, 0, R.drawable.ice, ACTIVITY));
-        list.add(new Remedy(getString(R.string.remedy_stretch), null, MainActivity.getTheDate(), false, 0, R.drawable.stretch, ACTIVITY));
-        return list;
-
-    }
 
 }

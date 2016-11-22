@@ -1,22 +1,15 @@
 package owlslubic.owlstracker.main;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import owlslubic.owlstracker.R;
-import owlslubic.owlstracker.models.RatingScale;
 import owlslubic.owlstracker.models.Remedy;
-import owlslubic.owlstracker.models.WellnessTracker;
 
 /**
  * Created by owlslubic on 11/7/16.
@@ -24,7 +17,7 @@ import owlslubic.owlstracker.models.WellnessTracker;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "dbhelper";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "owls_tracker.db";
     public static final String USER_TABLE = "user_table";
     public static final String REMEDY_OPTIONS_TABLE = "remedies_table";
@@ -92,7 +85,6 @@ public class DBHelper extends SQLiteOpenHelper {
             /*   helper methods!   */
 
 
-
     //empty table contents
     public void dumpTableData(Context context) {
         SQLiteDatabase db = getWritableDatabase();
@@ -156,23 +148,6 @@ public class DBHelper extends SQLiteOpenHelper {
         //date needs to be surrounded by single quotes to be included in the query string
         return db.rawQuery(queryRemedies, new String[]{date});
     }
-
-    public void editQuantity(Remedy data, int amt) {
-        //change it on the screen
-
-        //set it to the data object
-        data.setQtyOrDegree(amt);
-
-        //update the column in the db
-        SQLiteDatabase db = getWritableDatabase();
-        String update = "UPDATE " + USER_TABLE +
-                " SET " + COL_QTY_OR_DEGREE + " = " + amt +
-                " WHERE " + COL_NAME + " = \'" + data.getName() +
-                "\' AND " + COL_DATE + " = \'" + data.getDate() + "\'";
-        db.execSQL(update);
-        db.close();
-    }
-
 
 
 }
