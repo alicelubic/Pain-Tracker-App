@@ -9,15 +9,15 @@ import owlslubic.owlstracker.R;
 import owlslubic.owlstracker.main.DBHelper;
 import owlslubic.owlstracker.main.MainActivity;
 
-import static owlslubic.owlstracker.main.DBHelper.ACTIVITY;
-import static owlslubic.owlstracker.main.DBHelper.MED;
+import static owlslubic.owlstracker.main.DBHelper.*;
+
 
 /**
  * Created by owlslubic on 11/14/16.
  */
 
 public class RemedyListSingleton {
-    public List<Remedy> mRemedies;
+    public ArrayList<Remedy> mRemedies;
     private static RemedyListSingleton sInstance;
     private Context mContext;
 
@@ -32,8 +32,9 @@ public class RemedyListSingleton {
         return sInstance;
     }
 
-    public List<Remedy> getFreshRemediesList() {
-        /** this list should be grabbed from the db.........?  */
+    public ArrayList<Remedy> getFreshRemediesList() {
+        /** this list should be grabbed from the db.........?
+         * because when a user adds their own shit, it should be to db, no?*/
         mRemedies = new ArrayList<>();
 
         mRemedies.add(new Remedy(mContext.getString(R.string.advil), null, MainActivity.getTheDate(), false, 0, R.drawable.advil, MED));
@@ -48,4 +49,7 @@ public class RemedyListSingleton {
 
     }
 
+
+
 }
+

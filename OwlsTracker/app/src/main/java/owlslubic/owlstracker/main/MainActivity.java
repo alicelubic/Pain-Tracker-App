@@ -94,11 +94,14 @@ public class MainActivity extends AppCompatActivity {
     public void submitData() {
 
         /**i realize that OTTO or any event bus is not intended for this,
-         * but i wanted to get a sense of how it works in a simple way*/
+         * but i wanted to get a sense of how it works in a simple way
+         *
+         * here i am using it so that the same toolbar button will save the data from
+         * whichever page is currently showing only
+         * */
 
 
         Bus bus = getBusInstance();
-
         switch (mPager.getCurrentItem()) {
             case 0://ratings
                 bus.post(new SaveRatingsEvent());
@@ -108,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2://summary
                 //do nothing
-                Toast.makeText(this, "shouldn't even be here today", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "I'm not even supposed to be here today!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

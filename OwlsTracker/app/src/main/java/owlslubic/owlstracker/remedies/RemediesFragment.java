@@ -1,6 +1,9 @@
 package owlslubic.owlstracker.remedies;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +31,13 @@ import owlslubic.owlstracker.models.RemedyListSingleton;
 import owlslubic.owlstracker.models.SaveRemediesEvent;
 
 import static owlslubic.owlstracker.main.DBHelper.ACTIVITY;
+import static owlslubic.owlstracker.main.DBHelper.COL_DATE;
+import static owlslubic.owlstracker.main.DBHelper.COL_IMAGE_ID;
+import static owlslubic.owlstracker.main.DBHelper.COL_MED_OR_ACT;
+import static owlslubic.owlstracker.main.DBHelper.COL_NAME;
+import static owlslubic.owlstracker.main.DBHelper.COL_NOTES;
 import static owlslubic.owlstracker.main.DBHelper.MED;
+import static owlslubic.owlstracker.main.DBHelper.REMEDY_OPTIONS_TABLE;
 
 /**
  * Created by owlslubic on 11/7/16.
@@ -37,7 +46,7 @@ import static owlslubic.owlstracker.main.DBHelper.MED;
 public class RemediesFragment extends Fragment {
     private static final String TAG = "RemediesFrag";
     private RecyclerView mRecyclerView;
-    private List<Remedy> mRemedies;
+    private ArrayList<Remedy> mRemedies;
     private RemediesRecyclerAdapter mAdapter;
     private FrameLayout mLayout;
 
@@ -74,9 +83,9 @@ public class RemediesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //get the list of objects
         mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
-        //        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
-//        Log.d(TAG, "onViewCreated: before passed to adapter, mRemedies size is: "+ mRemedies.size());
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
         //pass to and set the adapter
         mAdapter = new RemediesRecyclerAdapter(
                 getContext(), mRemedies);
@@ -99,23 +108,26 @@ public class RemediesFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    //when toolbar's done button is clicked, event is fired from main activity
-    //i realize that the event in this method must match the event that is sent out by the bus
-    //and by passing that event, i could manipulate it
-    //but in making this a method, am i supposed to call it somewhere?
+    /**when toolbar's done button is clicked, event is fired from main activity
+     * i realize that the event in this method must match the event that is sent out by the bus
+     * and by passing that event, i could manipulate it
+     * but in making this a method, am i supposed to call it somewhere?*/
     @Subscribe
     public void writeRemediesToDB(SaveRemediesEvent event) {
-        DBHelper helper = DBHelper.getInstance(getContext());
         //write them to the database
         for (Remedy rem : mRemedies) {
             if (rem.wasUsedToday()) {
+                Log.d(TAG, "writeRemediesToDB: remWasUsedToday: "+ rem.getName());
                 new WriteToDatabaseTask(getContext(), getView()).execute(rem);
             }
         }
         //then reset the cards by passing a fresh list to the adapter
-        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
-//        mRemedies = DBHelper.getInstance(getContext()).getRemedyOptionsList(false, false);
-        Handler handler = new Handler();
+        new GetFreshRemediesListTask().execute();
+
+//        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
+//        mAdapter.notifyDataSetChanged();
+
+/*      Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -123,9 +135,47 @@ public class RemediesFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
             }
         }, 1000);
-
+*/
 
     }
 
+    class GetFreshRemediesListTask extends AsyncTask<Void,Void,ArrayList<Remedy>> {
 
+
+        @Override
+        protected ArrayList<Remedy> doInBackground(Void... params) {
+            SQLiteDatabase db = DBHelper.getInstance(getContext()).getReadableDatabase();
+            ArrayList<Remedy> remList = new ArrayList<>();
+            String query = "SELECT * FROM " + REMEDY_OPTIONS_TABLE;
+            String name;
+            String notes;
+            String date;
+            int imageId;
+            String type;
+
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    name = cursor.getString(cursor.getColumnIndex(COL_NAME));
+                    notes = cursor.getString(cursor.getColumnIndex(COL_NOTES));
+                    date = cursor.getString(cursor.getColumnIndex(COL_DATE));
+                    imageId = cursor.getInt(cursor.getColumnIndex(COL_IMAGE_ID));
+                    type = cursor.getString(cursor.getColumnIndex(COL_MED_OR_ACT));
+
+                    remList.add(new Remedy(name, notes, date, false, 0, imageId, type));
+
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            return remList;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Remedy> remedies) {
+            super.onPostExecute(remedies);
+            mRemedies = remedies;
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 }

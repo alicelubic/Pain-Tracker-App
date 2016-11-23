@@ -3,6 +3,7 @@ package owlslubic.owlstracker.summary;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,10 @@ import owlslubic.owlstracker.main.DBHelper;
  * Created by owlslubic on 11/8/16.
  */
 
-public class SummaryCursorAdapter extends CursorAdapter {
-    public SummaryCursorAdapter(Context context, Cursor c, int flags) {
+class SummaryCursorAdapter extends CursorAdapter {
+    private static final String TAG = "CursorAdapter";
+
+    SummaryCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 
@@ -65,8 +68,9 @@ public class SummaryCursorAdapter extends CursorAdapter {
         }
 
         textView.setText(text);
+        Log.d(TAG, "cursor adapter binding text: "+text);
 
-        //callback here to tell the fragment which text is being set... or soemthing
+        //TODO callback here to tell the fragment which text is being set... or soemthing
         //because we need to determine that in order to set the data to the lil detail fraggie
 
 

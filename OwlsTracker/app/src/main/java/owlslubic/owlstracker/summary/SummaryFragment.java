@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +27,13 @@ import owlslubic.owlstracker.models.WellnessTracker;
  */
 
 public class SummaryFragment extends Fragment {
+    private static final String TAG = "SummaryFragment";
     private ListView mListView;
     private FrameLayout mContainer;
     private SwipeRefreshLayout mRefresh;
     private DBHelper mHelper;
     private SummaryCursorAdapter mAdapter;
     private TextView mNoData;
-    private Cursor mCursor;
 
 
     public static SummaryFragment newInstance() {
@@ -54,8 +55,9 @@ public class SummaryFragment extends Fragment {
         mContainer = (FrameLayout) view.findViewById(R.id.frame_detailfrag_container);
         mRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_summary);
         mHelper = DBHelper.getInstance(getContext());
-//        mCursor = mHelper.getAllByDate(MainActivity.getTheDate());
-        mAdapter = new SummaryCursorAdapter(getContext(), mHelper.getAllByDate(MainActivity.getTheDate()), CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        mAdapter = new SummaryCursorAdapter(getContext(),
+                mHelper.getAllByDate(MainActivity.getTheDate()),
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         mNoData = (TextView) view.findViewById(R.id.textview_no_summary_available);
         return view;
     }
@@ -67,8 +69,10 @@ public class SummaryFragment extends Fragment {
 //        ((MainActivity)getActivity()).getSupportActionBar().setTitle("today's summary");
 
 
-        //create and set adapter
+        checkCursorCount(mAdapter.getCursor());
         mListView.setAdapter(mAdapter);
+
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -88,9 +92,6 @@ public class SummaryFragment extends Fragment {
         //swipe to refresh list results
         setRefresher();
 
-        //account for lack of data...
-//        checkCursorCount(mCursor);
-
     }
 
     //preserve data for configuration change
@@ -100,30 +101,33 @@ public class SummaryFragment extends Fragment {
         setRetainInstance(true);
     }
 
-
     public void setRefresher() {
-        mRefresh.setColorSchemeColors(getContext().getResources().getColor(R.color.purple));
+        mRefresh.setColorSchemeColors(getContext().getResources().getColor(R.color.light_turquoise));
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mRefresh.setRefreshing(false);
                 //query the db again, swap in the cursor with updated data
                 Cursor newCursor = mHelper.getAllByDate(MainActivity.getTheDate());
+                Log.d(TAG, "onRefresh: new cursor count is: " + newCursor.getCount());
+
+                checkCursorCount(newCursor);
                 mAdapter.swapCursor(newCursor);
-//                checkCursorCount(newCursor);
+
             }
         });
 
     }
 
-    public void checkCursorCount(Cursor cursor) {
+    private void checkCursorCount(Cursor cursor) {
         if (cursor.getCount() == 0) {
+            //if there's no data, display a "no summary available" message
             mNoData.setVisibility(View.VISIBLE);
             mNoData.setText(R.string.no_summary);
         } else {
             mNoData.setVisibility(View.GONE);
-            mNoData.setText(null);
         }
+
     }
 
     public void launchEditFrag(Context context, AdapterView<?> parent, int position) {

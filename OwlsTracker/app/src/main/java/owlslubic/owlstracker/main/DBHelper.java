@@ -96,7 +96,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<Remedy> getRemedyOptionsList(boolean isMed, boolean isActivity) {
+
+    /** moved this to an asynctask, but without the med/activity separation
+     * because i dont remember why  i set this up that way in the first place...
+     * */
+  /*  public ArrayList<Remedy> getRemedyOptionsList(boolean isMed, boolean isActivity) {
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<Remedy> allList = new ArrayList<>();
         ArrayList<Remedy> medList = new ArrayList<>();
@@ -139,8 +143,9 @@ public class DBHelper extends SQLiteOpenHelper {
             return allList;
         }
     }
+*/
 
-
+    //TODO make this not on the UI thread, but not necessaraily in asynctask?
     public Cursor getAllByDate(String date) {
         SQLiteDatabase db = getReadableDatabase();
         String queryRemedies = "SELECT * FROM " + USER_TABLE + " WHERE " + COL_DATE + " =?";
