@@ -16,6 +16,7 @@ import owlslubic.owlstracker.main.MainActivity;
 import owlslubic.owlstracker.main.DBHelper;
 import owlslubic.owlstracker.models.Remedy;
 import owlslubic.owlstracker.models.SaveRemediesEvent;
+import owlslubic.owlstracker.models.UpdateRemediesEvent;
 
 /**
  * Created by owlslubic on 11/7/16.
@@ -33,13 +34,6 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
         MainActivity.getBusInstance().register(this);
     }
 
-    @Subscribe
-    public void onDataSetChanged(SaveRemediesEvent event) {
-        for(Remedy rem : mRemedies){
-
-        }
-
-    }
 
 
     @Override
@@ -72,7 +66,20 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
             }
         });
 
+        //testing this out:
+        //if on bind, it resets the qty whatever anyway.... then maybe this will fix my weird ui problem
+        currentItem.setUsedToday(false);
+        //reset card color
+        holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.purple));
+        //hide quantity textview
+        holder.mQuantity.setVisibility(View.GONE);
+        //reset item quantity
+        currentItem.setQtyOrDegree(0);
+
+
     }
+
+
 
     private void resetCounter(RemediesViewHolder holder, Remedy currentItem) {
         currentItem.setUsedToday(false);

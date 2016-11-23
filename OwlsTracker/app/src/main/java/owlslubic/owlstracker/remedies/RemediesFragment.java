@@ -65,7 +65,6 @@ public class RemediesFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         MainActivity.getBusInstance().register(this);
-
     }
 
 
@@ -81,7 +80,8 @@ public class RemediesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //get the list of objects
+
+        //get the list of objects//TODO decide how you want to be getting this list. DB? Singleton? pick!
         mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -108,7 +108,7 @@ public class RemediesFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    /**when toolbar's done button is clicked, event is fired from main activity
+    /** when toolbar's done button is clicked, event is fired from main activity
      * i realize that the event in this method must match the event that is sent out by the bus
      * and by passing that event, i could manipulate it
      * but in making this a method, am i supposed to call it somewhere?*/
@@ -121,23 +121,23 @@ public class RemediesFragment extends Fragment {
                 new WriteToDatabaseTask(getContext(), getView()).execute(rem);
             }
         }
-        //then reset the cards by passing a fresh list to the adapter
-        new GetFreshRemediesListTask().execute();
 
-//        mRemedies = RemedyListSingleton.getInstance(getContext()).getFreshRemediesList();
-//        mAdapter.notifyDataSetChanged();
 
-/*      Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // wait a sec
-                mAdapter.notifyDataSetChanged();
-            }
-        }, 1000);
-*/
+/** so if i call notify even though i didnt actually change the data,
+ * it'll call OnBindViewHolder and thus set my qty to  0 again it seems
+ * because i'm not changing the data, i just need it to rebind and reset the UI accordingly*/
+        mAdapter.notifyDataSetChanged();
 
     }
+
+    public void swap(ArrayList<Remedy> remedies){
+        mRemedies.clear();
+        mRemedies.addAll(remedies);
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+/*
 
     class GetFreshRemediesListTask extends AsyncTask<Void,Void,ArrayList<Remedy>> {
 
@@ -178,4 +178,7 @@ public class RemediesFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
     }
+
+*/
+
 }

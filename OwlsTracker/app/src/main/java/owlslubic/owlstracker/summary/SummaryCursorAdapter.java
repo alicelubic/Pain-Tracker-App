@@ -56,15 +56,13 @@ class SummaryCursorAdapter extends CursorAdapter {
 
             text = name + " ";
 
-            int stringId = -1;
             if (qtyOrDegree == 1) {
-                stringId = R.string.degree_1;
+                text+= "a bit";
             } else if (qtyOrDegree == 2) {
-                stringId = R.string.degree_2;
+                text+= "a lot";
             } else if (qtyOrDegree == 3) {
-                stringId = R.string.degree_3;
+                text+= "tons";
             }
-            text += context.getString(stringId);
         }
 
         textView.setText(text);

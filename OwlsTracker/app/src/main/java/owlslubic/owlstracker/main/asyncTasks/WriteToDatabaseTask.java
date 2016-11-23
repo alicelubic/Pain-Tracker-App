@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.View;
 
 import owlslubic.owlstracker.main.DBHelper;
+import owlslubic.owlstracker.main.MainActivity;
 import owlslubic.owlstracker.models.Rating;
 import owlslubic.owlstracker.models.Remedy;
+import owlslubic.owlstracker.models.UpdateRemediesEvent;
 import owlslubic.owlstracker.models.WellnessTracker;
 import static owlslubic.owlstracker.main.DBHelper.*;
 
@@ -90,6 +92,7 @@ public class WriteToDatabaseTask extends AsyncTask<WellnessTracker, Void, Void> 
             Snackbar snack = Snackbar.make(mView, "Saved!", Snackbar.LENGTH_SHORT);
             snack.show();
         }
+        MainActivity.getBusInstance().post(new UpdateRemediesEvent());
     }
 
 }
