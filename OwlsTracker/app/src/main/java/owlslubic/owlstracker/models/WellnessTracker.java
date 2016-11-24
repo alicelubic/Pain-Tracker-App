@@ -7,11 +7,11 @@ package owlslubic.owlstracker.models;
 public class WellnessTracker {
     private String name, notes, date;
 
-    public WellnessTracker(String name, String notes, String date) {
-        this.name = name;
-        this.notes = notes;
-        this.date = date;
-    }
+        public WellnessTracker(String name, String date) {
+            this.name = name;
+            this.notes = notes;
+            this.date = date;
+        }
 
     public String getName() {
         return name;

@@ -41,10 +41,9 @@ class PainRatingsAdapter extends RecyclerView.Adapter<PainRatingsViewHolder> {
             public void onClick(View v) {
                 //change color to mark it as selected
                 holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.light_turquoise));
-//                holder.mNum.setTextSize(holder.mNum.getTextSize() + 1);
                 //TODO devise a way to select this so it can be saved alongside the others like remedies
                 //only one can be selected
-                //currentItem.setSelected();
+                currentItem.setSelected(true);
 
             }
         });
@@ -52,8 +51,7 @@ class PainRatingsAdapter extends RecyclerView.Adapter<PainRatingsViewHolder> {
             @Override
             public boolean onLongClick(View v) {
                 holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-//                holder.mNum.setTextSize(holder.mNum.getTextSize() - 1);
-
+                currentItem.setSelected(false);
                 return true;
             }
         });

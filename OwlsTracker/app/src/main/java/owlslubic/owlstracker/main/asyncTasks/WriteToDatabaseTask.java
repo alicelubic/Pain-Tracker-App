@@ -14,8 +14,8 @@ import owlslubic.owlstracker.models.Rating;
 import owlslubic.owlstracker.models.Remedy;
 import owlslubic.owlstracker.models.UpdateRemediesEvent;
 import owlslubic.owlstracker.models.WellnessTracker;
-import static owlslubic.owlstracker.main.DBHelper.*;
 
+import static owlslubic.owlstracker.main.DBHelper.*;
 
 
 /**
@@ -35,6 +35,7 @@ public class WriteToDatabaseTask extends AsyncTask<WellnessTracker, Void, Void> 
 
     @Override
     protected Void doInBackground(WellnessTracker... params) {
+        Log.i(TAG, "WriteToDatabaseTask doInBackground was called...");
         Remedy rem = null;
         Rating rat = null;
         if (params[0].getClass().equals(Remedy.class)) {
@@ -48,9 +49,9 @@ public class WriteToDatabaseTask extends AsyncTask<WellnessTracker, Void, Void> 
         String name;
         String notes;
         int qtyOrDegree;
-        double rating;
+        int rating;
         String type;
-        if ((rat == null) && (rem != null)) {// && (rem.wasUsedToday())) {
+        if ((rat == null) && (rem != null)) {
             name = rem.getName();
             notes = rem.getNotes();
             date = rem.getDate();
@@ -70,6 +71,7 @@ public class WriteToDatabaseTask extends AsyncTask<WellnessTracker, Void, Void> 
             //saying return because if it's not at least one of those, then it's not gonna work
             return null;
         }
+        Log.d(TAG, "doInBackground: writing " + name);
 
         SQLiteDatabase db = DBHelper.getInstance(mContext).getWritableDatabase();
         ContentValues vals = new ContentValues();
@@ -92,7 +94,6 @@ public class WriteToDatabaseTask extends AsyncTask<WellnessTracker, Void, Void> 
             Snackbar snack = Snackbar.make(mView, "Saved!", Snackbar.LENGTH_SHORT);
             snack.show();
         }
-        MainActivity.getBusInstance().post(new UpdateRemediesEvent());
     }
 
 }

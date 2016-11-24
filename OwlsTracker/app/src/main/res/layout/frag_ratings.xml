@@ -5,17 +5,106 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="center_horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_pain_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="@string/pain_scale_prompt" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_ratings_frag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_below="@id/tv_pain_title"
+            android:layout_marginBottom="16dp"
 
-    </LinearLayout>
+            android:layout_marginTop="16dp" />
+
+
+        <TextView
+            android:id="@+id/tv_stress_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerview_ratings_frag"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="@string/stress_seekbar_title" />
+
+        <TextView
+            android:id="@+id/tv_stress_qty"
+            style="@style/tv_seekbar_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_stress_title"
+            android:layout_toEndOf="@id/tv_stress_title" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekbar_stress"
+            style="@style/seekbar_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_stress_title" />
+
+        <TextView
+            android:id="@+id/tv_sleep_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seekbar_stress"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="@string/sleep_seekbar_title" />
+
+        <TextView
+            android:id="@+id/tv_sleep_qty"
+            style="@style/tv_seekbar_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_sleep_title"
+            android:layout_toEndOf="@id/tv_sleep_title" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekbar_sleep"
+            style="@style/seekbar_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_sleep_title" />
+
+
+        <TextView
+            android:id="@+id/tv_food_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seekbar_sleep"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="@string/food_seekbar_title" />
+
+        <TextView
+            android:id="@+id/tv_food_qty"
+            style="@style/tv_seekbar_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tv_food_title"
+            android:layout_toEndOf="@id/tv_food_title" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekbar_food"
+            style="@style/seekbar_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_food_title" />
+
+
+    </RelativeLayout>
 
 </FrameLayout>

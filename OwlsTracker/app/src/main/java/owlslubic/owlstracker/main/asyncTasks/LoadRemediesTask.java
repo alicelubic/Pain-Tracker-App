@@ -4,10 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -42,13 +39,13 @@ public class LoadRemediesTask extends AsyncTask<Void, Integer, Void> {
         //create the objects
         //this may change when, in the future, the user can add their own also...
         ArrayList<Remedy> list = new ArrayList<>();
-        list.add(new Remedy(mContext.getString(R.string.advil), null, MainActivity.getTheDate(), false, 0, R.drawable.advil, MED));
-        list.add(new Remedy(mContext.getString(R.string.ativan), null, MainActivity.getTheDate(), false, 0, R.drawable.ativan, MED));
-        list.add(new Remedy(mContext.getString(R.string.herbal_supp), null, MainActivity.getTheDate(), false, 0, R.drawable.herb, MED));
-        list.add(new Remedy(mContext.getString(R.string.turmeric), null, MainActivity.getTheDate(), false, 0, R.drawable.turmeric, MED));
-        list.add(new Remedy(mContext.getString(R.string.remedy_walk), null, MainActivity.getTheDate(), false, 0, R.drawable.walk, ACTIVITY));
-        list.add(new Remedy(mContext.getString(R.string.remedy_ice), null, MainActivity.getTheDate(), false, 0, R.drawable.ice, ACTIVITY));
-        list.add(new Remedy(mContext.getString(R.string.remedy_stretch), null, MainActivity.getTheDate(), false, 0, R.drawable.stretch, ACTIVITY));
+        list.add(new Remedy(mContext.getString(R.string.advil), MainActivity.getTheDate(), false, 0, R.drawable.advil, MED));
+        list.add(new Remedy(mContext.getString(R.string.ativan), MainActivity.getTheDate(), false, 0, R.drawable.ativan, MED));
+        list.add(new Remedy(mContext.getString(R.string.herbal_supp), MainActivity.getTheDate(), false, 0, R.drawable.herb, MED));
+        list.add(new Remedy(mContext.getString(R.string.turmeric), MainActivity.getTheDate(), false, 0, R.drawable.turmeric, MED));
+        list.add(new Remedy(mContext.getString(R.string.remedy_walk), MainActivity.getTheDate(), false, 0, R.drawable.walk, ACTIVITY));
+        list.add(new Remedy(mContext.getString(R.string.remedy_ice), MainActivity.getTheDate(), false, 0, R.drawable.ice, ACTIVITY));
+        list.add(new Remedy(mContext.getString(R.string.remedy_stretch), MainActivity.getTheDate(), false, 0, R.drawable.stretch, ACTIVITY));
         Log.d(TAG, "doInBackground: list size is " + list.size());
         //then write them to the database
         ContentValues vals = new ContentValues();

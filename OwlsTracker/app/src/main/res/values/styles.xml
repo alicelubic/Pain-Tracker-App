@@ -12,6 +12,19 @@
     </style>
 
 
+    <style name="tv_seekbar_quantity" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:textSize">14sp</item>
+
+    </style>
+
+    <style name="seekbar_style" parent="Base.Widget.AppCompat.SeekBar">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:max">10</item>
+
+    </style>
 
 
 </resources>

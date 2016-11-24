@@ -16,22 +16,22 @@ public class Rating extends WellnessTracker {
     * overall
     * */
 
-    private double rating;
+    private int rating;
     private int imageId;
     private boolean isSelected;
 
-    public Rating(String name, String notes, String date, double rating, @Nullable int imageId, boolean isSelected) {
-        super(name, notes, date);
+    public Rating(String name, String date, int rating, @Nullable int imageId, boolean isSelected) {
+        super(name, date);
         this.rating = rating;
         this.imageId = imageId;
         this.isSelected = isSelected;
     }
 
-    public double getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 

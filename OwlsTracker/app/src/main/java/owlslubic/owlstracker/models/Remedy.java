@@ -27,8 +27,8 @@ public class Remedy extends WellnessTracker {
     private int imageId;
     private String medOrActivity;
 
-    public Remedy(String name, String notes, String date, boolean usedToday, int qtyOrDegree, int imageId, String medOrActivity) {
-        super(name, notes, date);
+    public Remedy(String name, String date, boolean usedToday, int qtyOrDegree, int imageId, String medOrActivity) {
+        super(name, date);
         this.usedToday = usedToday;
         this.qtyOrDegree = qtyOrDegree;
         this.imageId = imageId;

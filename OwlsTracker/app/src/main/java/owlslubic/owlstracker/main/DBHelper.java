@@ -64,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
             COL_NAME + " TEXT, " +
             COL_NOTES + " TEXT, " +
             COL_QTY_OR_DEGREE + " INT, " +
-            COL_RATING + " DOUBLE, " +
+            COL_RATING + " INT, " +
             COL_MED_OR_ACT + " TEXT)";
 
     //define table for all available remedy, rating and treatment options
@@ -94,6 +94,17 @@ public class DBHelper extends SQLiteOpenHelper {
         Toast.makeText(context, "remedies_table contents deleted", Toast.LENGTH_SHORT).show();
         db.close();
     }
+
+    //TODO make this not on the UI thread, but not necessaraily in asynctask?
+    public Cursor getAllByDate(String date) {
+        SQLiteDatabase db = getReadableDatabase();
+        String queryRemedies = "SELECT * FROM " + USER_TABLE + " WHERE " + COL_DATE + " =?";
+        //note to self: earlier sql thought that the date was my column name, and it is because the
+        //date needs to be surrounded by single quotes to be included in the query string
+        return db.rawQuery(queryRemedies, new String[]{date});
+    }
+
+
 
 
 
@@ -145,14 +156,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 */
 
-    //TODO make this not on the UI thread, but not necessaraily in asynctask?
-    public Cursor getAllByDate(String date) {
-        SQLiteDatabase db = getReadableDatabase();
-        String queryRemedies = "SELECT * FROM " + USER_TABLE + " WHERE " + COL_DATE + " =?";
-        //note to self: earlier sql thought that the date was my column name, and it is because the
-        //date needs to be surrounded by single quotes to be included in the query string
-        return db.rawQuery(queryRemedies, new String[]{date});
-    }
+
 
 
 }

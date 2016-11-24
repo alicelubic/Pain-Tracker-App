@@ -54,7 +54,6 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
         holder.mCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: quantity is: " + currentItem.getQtyOrDegree());
                 updateCounter(holder, currentItem);
             }
         });
@@ -66,8 +65,7 @@ class RemediesRecyclerAdapter extends RecyclerView.Adapter<RemediesViewHolder> {
             }
         });
 
-        //testing this out:
-        //if on bind, it resets the qty whatever anyway.... then maybe this will fix my weird ui problem
+        //resetting the data on bind because that's how i will refresh it after writing to db
         currentItem.setUsedToday(false);
         //reset card color
         holder.mCard.setBackgroundColor(mContext.getResources().getColor(R.color.purple));

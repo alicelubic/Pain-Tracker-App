@@ -20,5 +20,9 @@
     <string name="degree_3">tons</string>
     <string name="degree_1">kinda</string>
     <string name="no_summary">No summary available</string>
+    <string name="stress_seekbar_title">stress</string>
+    <string name="sleep_seekbar_title">sleep</string>
+    <string name="food_seekbar_title">food</string>
+    <string name="pain_scale_prompt">How is your pain today?</string>
 
 </resources>

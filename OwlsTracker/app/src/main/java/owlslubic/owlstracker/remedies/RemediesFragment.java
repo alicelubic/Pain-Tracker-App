@@ -86,7 +86,7 @@ public class RemediesFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        //pass to and set the adapter
+        //pass list to and set the adapter
         mAdapter = new RemediesRecyclerAdapter(
                 getContext(), mRemedies);
         mRecyclerView.setAdapter(mAdapter);
@@ -101,6 +101,31 @@ public class RemediesFragment extends Fragment {
 
     }
 
+
+    /**
+     * when toolbar's done button is clicked, event is fired from main activity
+     * i realize that the event in this method must match the event that is sent out by the bus
+     * and by passing that event, i could manipulate it
+     * but in making this a method, am i supposed to call it somewhere?
+     */
+    @Subscribe
+    public void writeRemediesToDB(SaveRemediesEvent event) {
+        //write them to the database
+        for (Remedy rem : mRemedies) {
+            if (rem.wasUsedToday()) {
+                Log.d(TAG, "writeRemediesToDB: remWasUsedToday: " + rem.getName());
+                new WriteToDatabaseTask(getContext(), getView()).execute(rem);
+            }
+        }
+
+        /** so if i call notify even though i didnt actually change the data,
+        * it'll call OnBindViewHolder and thus set my qty to  0 again it seems
+        * because i'm not changing the data, i just need it to rebind and reset the UI accordingly*/
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+
     //preserve data for configuration change
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -108,77 +133,5 @@ public class RemediesFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    /** when toolbar's done button is clicked, event is fired from main activity
-     * i realize that the event in this method must match the event that is sent out by the bus
-     * and by passing that event, i could manipulate it
-     * but in making this a method, am i supposed to call it somewhere?*/
-    @Subscribe
-    public void writeRemediesToDB(SaveRemediesEvent event) {
-        //write them to the database
-        for (Remedy rem : mRemedies) {
-            if (rem.wasUsedToday()) {
-                Log.d(TAG, "writeRemediesToDB: remWasUsedToday: "+ rem.getName());
-                new WriteToDatabaseTask(getContext(), getView()).execute(rem);
-            }
-        }
-
-
-/** so if i call notify even though i didnt actually change the data,
- * it'll call OnBindViewHolder and thus set my qty to  0 again it seems
- * because i'm not changing the data, i just need it to rebind and reset the UI accordingly*/
-        mAdapter.notifyDataSetChanged();
-
-    }
-
-    public void swap(ArrayList<Remedy> remedies){
-        mRemedies.clear();
-        mRemedies.addAll(remedies);
-        mAdapter.notifyDataSetChanged();
-
-    }
-
-/*
-
-    class GetFreshRemediesListTask extends AsyncTask<Void,Void,ArrayList<Remedy>> {
-
-
-        @Override
-        protected ArrayList<Remedy> doInBackground(Void... params) {
-            SQLiteDatabase db = DBHelper.getInstance(getContext()).getReadableDatabase();
-            ArrayList<Remedy> remList = new ArrayList<>();
-            String query = "SELECT * FROM " + REMEDY_OPTIONS_TABLE;
-            String name;
-            String notes;
-            String date;
-            int imageId;
-            String type;
-
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()) {
-                while (!cursor.isAfterLast()) {
-                    name = cursor.getString(cursor.getColumnIndex(COL_NAME));
-                    notes = cursor.getString(cursor.getColumnIndex(COL_NOTES));
-                    date = cursor.getString(cursor.getColumnIndex(COL_DATE));
-                    imageId = cursor.getInt(cursor.getColumnIndex(COL_IMAGE_ID));
-                    type = cursor.getString(cursor.getColumnIndex(COL_MED_OR_ACT));
-
-                    remList.add(new Remedy(name, notes, date, false, 0, imageId, type));
-
-                    cursor.moveToNext();
-                }
-            }
-            cursor.close();
-            return remList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Remedy> remedies) {
-            super.onPostExecute(remedies);
-            mRemedies = remedies;
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-*/
 
 }
